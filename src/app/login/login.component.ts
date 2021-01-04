@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { AuthStore } from './../services/auth.store';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private auth: AuthStore,
     private router: Router) {
 
     this.form = fb.group({
@@ -32,7 +34,15 @@ export class LoginComponent implements OnInit {
 
     const val = this.form.value;
 
-
+    this.auth.login(val.email, val.password)
+      .subscribe(
+        () => {
+          this.router.navigateByUrl("/courses")
+        },
+        err => {
+          alert("Login");
+        }
+      )
 
   }
 

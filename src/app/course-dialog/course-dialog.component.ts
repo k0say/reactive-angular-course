@@ -1,3 +1,5 @@
+import { CoursesStore } from './../services/courses.store';
+import { CoursesService } from './../services/courses.service';
 import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import {Course} from "../model/course";
@@ -5,11 +7,17 @@ import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import * as moment from 'moment';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import { LoadingService } from '../loading/loading.service';
+import { MessagesServices } from '../messages/messages.service';
 
 @Component({
     selector: 'course-dialog',
     templateUrl: './course-dialog.component.html',
-    styleUrls: ['./course-dialog.component.css']
+    styleUrls: ['./course-dialog.component.css'],
+    providers: [
+        LoadingService,
+        MessagesServices
+    ]
 })
 export class CourseDialogComponent implements AfterViewInit {
 
@@ -19,6 +27,8 @@ export class CourseDialogComponent implements AfterViewInit {
 
     constructor(
         private fb: FormBuilder,
+        private coursesStore: CoursesStore,
+        private messagesService: MessagesServices,
         private dialogRef: MatDialogRef<CourseDialogComponent>,
         @Inject(MAT_DIALOG_DATA) course:Course) {
 
@@ -41,6 +51,10 @@ export class CourseDialogComponent implements AfterViewInit {
 
       const changes = this.form.value;
 
+      this.coursesStore.saveCourse(this.course.id, changes).subscribe();
+      
+      this.dialogRef.close(changes);
+      
     }
 
     close() {
