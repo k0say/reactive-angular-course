@@ -1,3 +1,4 @@
+[![CI](https://github.com/k0say/reactive-angular-course/actions/workflows/main.yml/badge.svg)](https://github.com/k0say/reactive-angular-course/actions/workflows/main.yml)
 
 ## The Reactive Angular Course
 
